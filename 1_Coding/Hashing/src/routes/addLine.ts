@@ -1,4 +1,7 @@
 import { FastifyRequest, RouteOptions } from "fastify";
+import * as uuid from "uuid";
+
+import { Logger } from "../models/Logger";
 import { Line } from "../models/Line";
 
 const lines: { hash: string; line: string }[] = [];
@@ -20,16 +23,23 @@ export const newLineRouter: RouteOptions = {
     },
     // this function is executed for every request before the handler is executed
     preHandler: async (request: FastifyRequest, reply: any) => {
-        // E.g. check authentication
+        const __id = uuid.v1();
+        Logger.getInstance().trace(`[${__id}] - New request rcv: ${JSON.stringify(request.body)}`);
     },
     handler: async (request: FastifyRequest, reply: any) => {
+        const logger = Logger.getInstance();
         const body = JSON.stringify(request.body);
-        if (!lines.length) lines.push({ hash: "0", line: `0,${body},1` });
-        else {
+
+        if (!lines.length) {
+            logger.trace(`[] - First line`);
+            lines.push({ hash: "0", line: `0,${body},1` });
+        } else {
+            logger.trace(`[] - Creating new line from previos one!`);
             const { hash, nonce } = Line.getNew(lines[lines.length - 1].hash, body);
             lines.push({ hash, line: `${hash},${body},${nonce}` });
         }
-        console.log(lines);
+
+        logger.trace(`Output file: ${lines}`);
         return { response_code: -1, response_message: "OK" };
     },
 };

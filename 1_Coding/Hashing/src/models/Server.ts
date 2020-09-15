@@ -2,7 +2,7 @@
 import fastify, { FastifyInstance, RouteOptions } from "fastify";
 
 export class Server {
-    instance: FastifyInstance = fastify({ logger: true });
+    instance: FastifyInstance = fastify();
 
     constructor() {}
 

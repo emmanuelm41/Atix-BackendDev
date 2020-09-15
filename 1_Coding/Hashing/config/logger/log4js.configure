@@ -1,0 +1,28 @@
+{
+    "appenders": 
+    { 
+        "console":{
+            "type": "console"
+        },
+        "file1": 
+        { 
+            "type": "file", 
+            "filename": "../logs/Process.log",
+            "maxLogSize": 30000000,
+            "backups":    "5",                     
+            "category":   "ATIX" 
+        } 
+    },
+    "categories": 
+    { 
+      "default": 
+      { 
+        "appenders": 
+            [
+                "console",
+                "file1"
+            ], 
+        "level": "TRACE" 
+      } 
+    }
+}
