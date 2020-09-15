@@ -1,3 +1,6 @@
-import { Line } from "./Line";
+import { Server } from "./models/Server";
+import { newLineRouter } from "./routes/addLine";
 
-const newLine = Line.getNew("00", "Chau");
+const server = new Server();
+server.addRoute(newLineRouter);
+server.start(3000);
