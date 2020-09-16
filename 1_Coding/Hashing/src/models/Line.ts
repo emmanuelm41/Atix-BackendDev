@@ -6,13 +6,13 @@ export class Line {
             hash = "";
         do {
             nonce++;
-            hash = Hash.calculate(prevLine, message, nonce);
+            hash = Hash.calculate(`${prevLine},${message},${nonce}`);
         } while (hash.substr(0, 2) !== "00");
 
         return { hash, nonce };
     }
 
     static checkIntegrity(prevLine: string, message: string, nonce: number): boolean {
-        return Hash.calculate(prevLine, message, nonce).substr(0, 2) === "00";
+        return Hash.calculate(`${prevLine},${message},${nonce}`).substr(0, 2) === "00";
     }
 }

@@ -1,9 +1,0 @@
-[2020-09-15T20:27:04.427] [TRACE] ATIX - [f6bbb860-f7aa-11ea-91fd-bf6eacfcd975] - New request rcv: {"test":2}
-[2020-09-15T20:27:04.430] [TRACE] ATIX - [false] - First line
-[2020-09-15T20:27:04.430] [TRACE] ATIX - [ { hash: '0', line: '0,{"test":2},1' } ]
-[2020-09-15T20:30:11.268] [TRACE] ATIX - [661a2840-f7ab-11ea-a2aa-d7f782e20534] - New request rcv: {"test":2}
-[2020-09-15T20:30:11.271] [TRACE] ATIX - [false] - First line
-[2020-09-15T20:30:11.271] [TRACE] ATIX - [ { hash: '0', line: '0,{"test":2},1' } ]
-[2020-09-15T20:32:23.955] [TRACE] ATIX - [b52fd2e0-f7ab-11ea-88c5-d13478dd14f7] - New request rcv: {"test":2}
-[2020-09-15T20:32:23.957] [TRACE] ATIX - [] - First line
-[2020-09-15T20:32:23.957] [TRACE] ATIX - [ { hash: '0', line: '0,{"test":2},1' } ]

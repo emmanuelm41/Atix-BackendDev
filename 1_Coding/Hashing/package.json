@@ -4,6 +4,8 @@
     "description": "Backend dev challenge",
     "main": "index.js",
     "scripts": {
+        "pretest": "tsc",
+        "test": "jest --runInBand",
         "tsc": "tsc",
         "start": "node build/index.js",
         "buildStart": "concurrently npm:test:*"

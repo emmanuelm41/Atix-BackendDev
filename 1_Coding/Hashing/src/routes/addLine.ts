@@ -4,7 +4,10 @@ import * as uuid from "uuid";
 import { Logger } from "../models/Logger";
 import { Line } from "../models/Line";
 
-const lines: { hash: string; line: string }[] = [];
+const context: { lastHash: string; lines: string[] } = {
+    lastHash: "0000000000000000000000000000000000000000000000000000000000000000",
+    lines: [],
+};
 
 export const newLineRouter: RouteOptions = {
     method: "POST",
@@ -30,16 +33,13 @@ export const newLineRouter: RouteOptions = {
         const logger = Logger.getInstance();
         const body = JSON.stringify(request.body);
 
-        if (!lines.length) {
-            logger.trace(`[] - First line`);
-            lines.push({ hash: "0", line: `0,${body},1` });
-        } else {
-            logger.trace(`[] - Creating new line from previos one!`);
-            const { hash, nonce } = Line.getNew(lines[lines.length - 1].hash, body);
-            lines.push({ hash, line: `${hash},${body},${nonce}` });
-        }
+        const prevHash = context.lastHash;
+        const { hash, nonce } = Line.getNew(prevHash, body);
 
-        logger.trace(`Output file: ${lines}`);
+        context.lines.push(`${prevHash},${body},${nonce}`);
+        context.lastHash = hash;
+
+        logger.trace(`Output file: ${JSON.stringify(context)}`);
         return { response_code: -1, response_message: "OK" };
     },
 };
