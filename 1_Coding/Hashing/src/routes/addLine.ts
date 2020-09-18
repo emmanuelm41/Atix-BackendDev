@@ -1,4 +1,4 @@
-import { FastifyRequest, RouteOptions } from "fastify";
+import { FastifyReply, FastifyRequest, RawRequestDefaultExpression, RawServerBase, RawServerDefault, RouteOptions } from "fastify";
 import * as uuid from "uuid";
 
 import { Logger } from "../models/Logger";
@@ -25,11 +25,12 @@ export const newLineRouter: RouteOptions = {
         },
     },
     // this function is executed for every request before the handler is executed
-    preHandler: async (request: FastifyRequest, reply: any) => {
+    preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
         const __id = uuid.v1();
+
         Logger.getInstance().trace(`[${__id}] - New request rcv: ${JSON.stringify(request.body)}`);
     },
-    handler: async (request: FastifyRequest, reply: any) => {
+    handler: async (request: FastifyRequest, reply: FastifyReply) => {
         const logger = Logger.getInstance();
         const body = JSON.stringify(request.body);
 
@@ -38,6 +39,8 @@ export const newLineRouter: RouteOptions = {
 
         context.lines.push(`${prevHash},${body},${nonce}`);
         context.lastHash = hash;
+
+        reply.header("Access-Control-Allow-Origin", "*");
 
         logger.trace(`Output file: ${JSON.stringify(context)}`);
         return { response_code: -1, response_message: "OK" };
