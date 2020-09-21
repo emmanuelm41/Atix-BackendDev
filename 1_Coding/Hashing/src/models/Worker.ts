@@ -55,7 +55,7 @@ class Worker {
     addTask(payload: GenericObject) {
         const logger = Logger.getInstance();
         const id = uuid.v1();
-        logger.trace(`[${id}] - Adding new task to the queu`);
+        logger.trace(`[${id}] - Adding new task to the queue`);
 
         this.tasks.push({ id, payload });
 
