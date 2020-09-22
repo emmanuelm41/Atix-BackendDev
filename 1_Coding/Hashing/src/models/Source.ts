@@ -29,7 +29,10 @@ export class Source {
                 logger.trace(`The las hash found is ${this.lastHash}`);
             } catch (error) {
                 logger.error(`Error found while loading the initial csv file. ${error.toString()}`);
-                process.exit(1);
+                logger.warn(`Deleting the previous one and creating new one!`);
+                fs.writeFileSync(this.path, "");
+
+                this.lastHash = "0000000000000000000000000000000000000000000000000000000000000000";
             }
         }
     }
