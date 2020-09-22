@@ -1,22 +1,22 @@
 import * as uuid from "uuid";
+
 import { Line } from "./Line";
+import { Source } from "./Source";
 import { Logger } from "../models/Logger";
 
 interface GenericObject {
     [key: string]: any;
 }
 
-const context: { lastHash: string; lines: string[] } = {
-    lastHash: "0000000000000000000000000000000000000000000000000000000000000000",
-    lines: [],
-};
-
 class Worker {
+    source: Source;
     isRunning: boolean = false;
     tasks: { id: string; payload: GenericObject }[] = [];
     events: { [key: string]: () => void } = {};
 
     constructor(interval: number) {
+        this.source = new Source();
+
         setInterval(() => {
             const logger = Logger.getInstance();
 
@@ -40,14 +40,11 @@ class Worker {
         const logger = Logger.getInstance();
         const body = JSON.stringify(payload);
 
-        const prevHash = context.lastHash;
+        const prevHash = this.source.lastHash;
         const { hash, nonce } = Line.getNew(prevHash, body);
         const newLine = `${prevHash},${body},${nonce}`;
 
-        context.lines.push(newLine);
-        context.lastHash = hash;
-
-        logger.trace(`[${id}] - Output file: ${JSON.stringify(context)}`);
+        this.source.appendNewLine(hash, newLine);
 
         return newLine;
     }

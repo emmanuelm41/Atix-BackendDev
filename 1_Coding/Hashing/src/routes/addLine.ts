@@ -2,6 +2,8 @@ import { FastifyReply, FastifyRequest, RouteOptions } from "fastify";
 import { Logger } from "../models/Logger";
 import { WorkerInstance } from "../models/Worker";
 
+const worker = WorkerInstance.getInstance();
+
 export const newLineRouter: RouteOptions = {
     method: "POST",
     url: "/",
@@ -21,10 +23,12 @@ export const newLineRouter: RouteOptions = {
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {},
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
         const logger = Logger.getInstance();
+        const body = request.body as { [key: string]: any };
+
         reply.header("Access-Control-Allow-Origin", "*");
 
-        const id = WorkerInstance.getInstance().addTask(request.body as { [key: string]: any });
-        WorkerInstance.getInstance().on(id, () => {
+        const id = worker.addTask(body);
+        worker.on(id, () => {
             logger.trace(`[${id}] - Sending response`);
             reply.status(200).send({ response_code: -1, response_message: "OK" });
         });
